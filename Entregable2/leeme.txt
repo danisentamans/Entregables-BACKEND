@@ -1,0 +1,2 @@
+npm init -y
+npm install mongoose axios node-binance-api cookie-parser

@@ -1,0 +1,103 @@
+
+  #crypto-list {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #coins {
+    list-style-type: none;
+    padding: 0;
+    align-content: center;
+    text-align: center;
+  }
+  
+  #coins li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+  }
+
+  h1 {
+    color: #ff6600;
+    align-content: center;
+    text-align: center;
+  }
+
+  h2 {
+    color: #ff6600;
+    align-content: center;
+    text-align: center;
+  }
+
+  h3 {
+    align-content: center;
+    text-align: center;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .chart-container {
+    position: relative;
+    margin: auto;
+    height: 400px;
+    width: 100%;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  .stat {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    text-align: center;
+  }
+
+  .history {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .history th,
+  .history td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .history th {
+    background-color: #f2f2f2;
+  }
+
+  .history tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .history tr:hover {
+    background-color: #ddd;
+  }
+
+  .history th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #ff6600;
+    color: white;
+  }
+  

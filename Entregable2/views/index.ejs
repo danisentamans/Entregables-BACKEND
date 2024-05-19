@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Trading Bot</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css" />
   </head>
-<body>
-  <h1>Bienvenido al trading bot de Daniel</h1>
-  <img src="/images/btc.png" alt="BTC Image" height="150px" width="150px" />
+  <body>
+    <h1>Bienvenido al trading bot de Daniel</h1>
+    <img src="/images/btc.png" alt="BTC Image" height="150px" width="150px" />
 
-  <div id="crypto-list">
-    <h2>Listado 5 criptomonedas</h2>
-    <ul id="coins"></ul>
-  </div>
+    <div id="crypto-list">
+      <h2>Listado 5 criptomonedas</h2>
+      <ul id="coins"></ul>
+    </div>
 
-  <h2>Historial de Trading</h2>
+    <h2>Historial de Trading</h2>
 
     <div class="container">
       <table class="history">
@@ -77,116 +77,163 @@
     </div>
 
     <script>
-      async function fetchCoins() {
-        const response = await fetch('/coins/list');
-        const coins = await response.json();
-        const coinsList = document.getElementById('coins');
-        coinsList.innerHTML = ""; // Clear existing list
-        coins.forEach(coin => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${coin.id} --> ${coin.name} (${coin.symbol}) - $${coin.price}`;
-          coinsList.appendChild(listItem);
-        });
-      }
-      fetchCoins();
+            async function fetchCoins() {
+              const response = await fetch('/coins/list');
+              const coins = await response.json();
+              const coinsList = document.getElementById('coins');
+              coinsList.innerHTML = ""; // Clear existing list
+              coins.forEach(coin => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${coin.id} --> ${coin.name} (${coin.symbol}) - $${coin.price}`;
+                coinsList.appendChild(listItem);
+              });
+            }
+            fetchCoins();
 
-      var data = <%- JSON.stringify(latestData) %>;
+            var data = <%- JSON.stringify(latestData) %>;
 
-      // Update stats
+           // Update stats
       if (data.length > 0) {
         var latest = data[data.length - 1];
         document.getElementById('open').innerText = latest.bar ? latest.bar.open.toFixed(2) : 'N/A';
         document.getElementById('high').innerText = latest.bar ? latest.bar.high.toFixed(2) : 'N/A';
         document.getElementById('low').innerText = latest.bar ? latest.bar.low.toFixed(2) : 'N/A';
         document.getElementById('close').innerText = latest.bar ? latest.bar.close.toFixed(2) : 'N/A';
-        document.getElementById('volume').innerText = latest.bar ? latest.bar.volume.toFixed(2) : 'N/A';
-        const profit = data.profitOrLoss > 0 ? data.profitOrLoss : 0.00
+        document.getElementById('volume').innerText = latest.bar ? latest.bar.volume.toFixed(6) : 'N/A';
+        const profit = latest.profitOrLoss > 0 ? latest.profitOrLoss : 0.00;
         document.getElementById('profit').innerText = profit.toFixed(2);
+
+        
+
+        // // Price Chart
+        // const ctxPrice = document.getElementById('priceChart').getContext('2d');
+        // const priceChart = new Chart(ctxPrice, {
+        //   type: 'line',
+        //   data: {
+        //     labels: ['Open', 'High', 'Low', 'Close'],
+        //     datasets: [{
+        //       label: 'Price',
+        //       data: [latest.bar.open, latest.bar.high, latest.bar.low, latest.bar.close],
+        //       borderColor: 'rgba(75, 192, 192, 1)',
+        //       borderWidth: 2,
+        //       fill: false,
+        //     }]
+        //   },
+        //   options: {
+        //     scales: {
+        //       y: {
+        //         beginAtZero: false
+        //       }
+        //     }
+        //   }
+        // });
+
+        // // Volume Chart
+        // const ctxVolume = document.getElementById('volumeChart').getContext('2d');
+        // const volumeChart = new Chart(ctxVolume, {
+        //   type: 'bar',
+        //   data: {
+        //     labels: ['Volume'],
+        //     datasets: [{
+        //       label: 'Volume',
+        //       data: [latest.bar.volume],
+        //       backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        //       borderColor: 'rgba(153, 102, 255, 1)',
+        //       borderWidth: 1,
+        //     }]
+        //   },
+        //   options: {
+        //     scales: {
+        //       y: {
+        //         beginAtZero: true
+        //       }
+        //     }
+        //   }
+        // });
       }
 
-      // Populate history
-      function populateHistory(data) {
-        const historyBody = document.getElementById('history-body');
-        historyBody.innerHTML = ''; // Clear existing rows
-        data.forEach(entry => {
-          const date = new Date(entry.bar.time);
-          const formattedDate = date.toLocaleString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          });
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${formattedDate}</td>
-            <td>${entry.order}</td>
-            <td>${entry.strategy.order_contracts}</td>
-            <td>${entry.ticker}</td>
-            <td>${entry.strategy.order_price}</td>
-            <td>${entry.stopLoss != null ? entry.stopLoss : 0.00}</td>
-            <td>${entry.takeProfit != null ? entry.takeProfit : 0.00}</td>
-            <td>${entry.closePrice != null ? entry.closePrice : 0.00}</td>
-            <td>${entry.profitOrLoss != null ? entry.profitOrLoss : 0.00}</td>
-            <td>${entry.strategy.order_comment}</td>
-          `;
-          historyBody.appendChild(row);
-        });
-      }
 
-      populateHistory(data);
-
-      if (data.length > 0) {
-        var latest = data[data.length - 1];
-        // Price Chart
-        const ctxPrice = document.getElementById('priceChart').getContext('2d');
-        const priceChart = new Chart(ctxPrice, {
-          type: 'line',
-          data: {
-            labels: ['Open', 'High', 'Low', 'Close'],
-            datasets: [{
-              label: 'Price',
-              data: [latest.bar.open, latest.bar.high, latest.bar.low, latest.bar.close],
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 2,
-              fill: false,
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: false
-              }
+            // Populate history
+            function populateHistory(data) {
+              const historyBody = document.getElementById('history-body');
+              historyBody.innerHTML = ''; // Clear existing rows
+              data.forEach(entry => {
+                const date = new Date(entry.bar.time);
+                const formattedDate = date.toLocaleString('en-GB', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false
+                });
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                  <td>${formattedDate}</td>
+                  <td>${entry.order}</td>
+                  <td>${entry.strategy.order_contracts}</td>
+                  <td>${entry.ticker}</td>
+                  <td>${entry.strategy.order_price}</td>
+                  <td>${entry.stopLoss != null ? entry.stopLoss : 0.00}</td>
+                  <td>${entry.takeProfit != null ? entry.takeProfit : 0.00}</td>
+                  <td>${entry.closePrice != null ? entry.closePrice : 0.00}</td>
+                  <td>${entry.profitOrLoss != null ? entry.profitOrLoss : 0.00}</td>
+                  <td>${entry.strategy.order_comment}</td>
+                `;
+                historyBody.appendChild(row);
+              });
             }
-          }
-        });
 
-        // Volume Chart
-        const ctxVolume = document.getElementById('volumeChart').getContext('2d');
-        const volumeChart = new Chart(ctxVolume, {
-          type: 'bar',
-          data: {
-            labels: ['Volume'],
-            datasets: [{
-              label: 'Volume',
-              data: [latest.bar.volume],
-              backgroundColor: 'rgba(153, 102, 255, 0.2)',
-              borderColor: 'rgba(153, 102, 255, 1)',
-              borderWidth: 1,
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          }
-        });
-      }
+            populateHistory(data);
+
+            // if (data.length > 0) {
+            //   var latest = data[data.length - 1];
+            //   // Price Chart
+            //   const ctxPrice = document.getElementById('priceChart').getContext('2d');
+            //   const priceChart = new Chart(ctxPrice, {
+            //     type: 'line',
+            //     data: {
+            //       labels: ['Open', 'High', 'Low', 'Close'],
+            //       datasets: [{
+            //         label: 'Price',
+            //         data: [latest.bar.open, latest.bar.high, latest.bar.low, latest.bar.close],
+            //         borderColor: 'rgba(75, 192, 192, 1)',
+            //         borderWidth: 2,
+            //         fill: false,
+            //       }]
+            //     },
+            //     options: {
+            //       scales: {
+            //         y: {
+            //           beginAtZero: false
+            //         }
+            //       }
+            //     }
+            //   });
+
+            //   // Volume Chart
+            //   const ctxVolume = document.getElementById('volumeChart').getContext('2d');
+            //   const volumeChart = new Chart(ctxVolume, {
+            //     type: 'bar',
+            //     data: {
+            //       labels: ['Volume'],
+            //       datasets: [{
+            //         label: 'Volume',
+            //         data: [latest.bar.volume],
+            //         backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            //         borderColor: 'rgba(153, 102, 255, 1)',
+            //         borderWidth: 1,
+            //       }]
+            //     },
+            //     options: {
+            //       scales: {
+            //         y: {
+            //           beginAtZero: true
+            //         }
+            //       }
+            //     }
+            //   });
+            // }
     </script>
-
-</body>
-
+  </body>
 </html>

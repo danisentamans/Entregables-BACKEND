@@ -163,7 +163,7 @@ app.post("/orders", async (req, res) => {
     : "CIERRE VENTA";
 
   const orderId = generateOrderId(10);
-  const { slPrice, tpPrice, exitPrice, profitLoss } = processOrder(commenty);
+  const { slPrice, tpPrice, exitPrice, profitLoss } = processOrder(comment);
 
   const stopLoss = slPrice > 0 ? slPrice : "";
   const takeProfit = tpPrice > 0 ? tpPrice : "";
@@ -309,18 +309,28 @@ app.put("/orders/:id", async (req, res) => {
   }
 });
 
-// Obtener el precio de una criptomoneda desde CoinGecko
+// Variable global para almacenar las monedas con precios
+let coinsWithPrices = [];
+let manualCoins = []; // Lista de monedas añadidas manualmente
+
+// Obtener el precio de una criptomoneda desde CoinGecko o manualCoins
 app.get("/price/:coin", async (req, res) => {
-  const coin = req.params.coin;
+  const coin = req.params.coin.toLowerCase(); // Coincidir en minúsculas para consistencia
+
+  // Buscar la criptomoneda en las monedas manuales
+  const manualCoin = manualCoins.find(c => c.id.toLowerCase() === coin);
+  if (manualCoin) {
+    return res.status(200).json({ [manualCoin.id]: { usd: manualCoin.price } });
+  }
+
   try {
+    // Buscar la criptomoneda en CoinGecko
     const response = await axios.get(
       `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd`
     );
     res.status(200).json(response.data);
   } catch (error) {
-    res
-      .status(500)
-      .json({ code: "error", message: "Error obteniendo datos de precios" });
+    res.status(500).json({ code: "error", message: "Error obteniendo datos de precios" });
   }
 });
 
@@ -334,10 +344,7 @@ async function updateCoinsWithPrices() {
     const coins = coinsResponse.data;
 
     // Obtener precios para las primeras 250 monedas (para evitar hacer demasiadas solicitudes)
-    const coinIds = coins
-      .slice(0, 250)
-      .map((coin) => coin.id)
-      .join(",");
+    const coinIds = coins.slice(0, 250).map((coin) => coin.id).join(",");
     const pricesResponse = await axios.get(
       `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd`
     );
@@ -355,6 +362,7 @@ async function updateCoinsWithPrices() {
 
     // Ordenar las monedas por precio
     coinsWithPrices.sort((a, b) => b.price - a.price);
+
   } catch (error) {
     console.error("Error actualizando la lista de monedas con precios:", error);
     throw new Error("Error actualizando la lista de monedas con precios");
@@ -367,29 +375,41 @@ updateCoinsWithPrices().catch((error) => {
   process.exit(1); // Salir de la aplicación si hay un error al iniciar
 });
 
-// Listar las criptomonedas principales por precio desde CoinGecko
+// Listar las criptomonedas principales por precio
 app.get("/coins/list", async (req, res) => {
   try {
-    // Asegurarse de que coinsWithPrices esté actualizado
-    await updateCoinsWithPrices();
-
+    // Combinar las monedas con precios y las monedas manuales
+    let combinedCoins = [...coinsWithPrices, ...manualCoins];
+    
+    // Ordenar las monedas combinadas por precio
+    combinedCoins.sort((a, b) => b.price - a.price);
+    
     // Obtener las 5 primeras monedas con precios
-    const topCoins = coinsWithPrices.slice(0, 5);
+    const topCoins = combinedCoins.slice(0, 5);
+    
     res.status(200).json(topCoins);
   } catch (error) {
     res.status(500).json({ code: "error", message: "Error obteniendo la lista de monedas" });
   }
 });
 
+
+// Listar las criptomonedas añadidas manualmente
+app.get("/manual-coins/list", async (req, res) => {
+  try {
+    res.status(200).json(manualCoins);
+  } catch (error) {
+    res.status(500).json({ code: "error", message: "Error obteniendo la lista de monedas añadidas manualmente" });
+  }
+});
+
 // Obtener una criptomoneda de la lista por su ID
 app.get("/coins/:id", async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id.toLowerCase(); // Coincidir en minúsculas para consistencia
   try {
-    // Asegurarse de que coinsWithPrices esté actualizado
-    await updateCoinsWithPrices();
-
-    // Buscar la moneda con el ID especificado en la lista de monedas con precios
-    const coin = coinsWithPrices.find((coin) => coin.id == id);
+    // Buscar la moneda con el ID especificado en la lista de monedas con precios o en las monedas añadidas manualmente
+    const coin = coinsWithPrices.find((coin) => coin.id.toLowerCase() === id) || 
+                 manualCoins.find((coin) => coin.id.toLowerCase() === id);
     if (coin) {
       res.status(200).json(coin);
     } else {
@@ -400,17 +420,17 @@ app.get("/coins/:id", async (req, res) => {
   }
 });
 
+
 // Eliminar una criptomoneda de la lista
 app.delete("/coins/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    // Filtrar la moneda con el ID especificado
-    const updatedCoins = coinsWithPrices.filter((coin) => coin.id !== id);
-    res.status(200).json(updatedCoins);
+    // Filtrar la moneda con el ID especificado tanto de la lista principal como de las manuales
+    coinsWithPrices = coinsWithPrices.filter((coin) => coin.id !== id);
+    manualCoins = manualCoins.filter((coin) => coin.id !== id);
+    res.status(200).json({ message: "Moneda eliminada correctamente" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ code: "error", message: "Error borrando la moneda" });
+    res.status(500).json({ code: "error", message: "Error borrando la moneda" });
   }
 });
 
@@ -424,16 +444,42 @@ app.put("/coins/:id", async (req, res) => {
     if (index !== -1) {
       // Actualizar la moneda con los nuevos valores
       coinsWithPrices[index] = { id, name, symbol, price };
+    }
+
+    // Actualizar la moneda en la lista manual
+    const manualIndex = manualCoins.findIndex((coin) => coin.id === id);
+    if (manualIndex !== -1) {
+      manualCoins[manualIndex] = { id, name, symbol, price };
+      res.status(200).json(manualCoins[manualIndex]);
+    } else if (index !== -1) {
       res.status(200).json(coinsWithPrices[index]);
     } else {
       res.status(404).json({ code: "error", message: "Moneda no encontrada" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ code: "error", message: "Error actualizando la moneda" });
+    res.status(500).json({ code: "error", message: "Error actualizando la moneda" });
   }
 });
+
+// Agregar una nueva criptomoneda a la lista
+app.post("/coins", async (req, res) => {
+  const { id, name, symbol, price } = req.body;
+  try {
+    // Verificar si la moneda ya existe en la lista
+    const existingCoin = coinsWithPrices.find((coin) => coin.id === id) || manualCoins.find((coin) => coin.id === id);
+    if (existingCoin) {
+      res.status(400).json({ code: "error", message: "Moneda ya existe" });
+    } else {
+      // Agregar la nueva moneda a la lista de monedas añadidas manualmente
+      const newCoin = { id, name, symbol, price };
+      manualCoins.push(newCoin);
+      res.status(201).json(newCoin);
+    }
+  } catch (error) {
+    res.status(500).json({ code: "error", message: "Error agregando la moneda" });
+  }
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

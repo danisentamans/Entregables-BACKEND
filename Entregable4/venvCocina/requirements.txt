@@ -3,4 +3,4 @@ djangorestframework
 requests
 pillow
 mysqlclient
-djangorestframework-authtoken
+pymysql

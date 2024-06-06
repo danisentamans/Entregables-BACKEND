@@ -4,7 +4,7 @@ from .serializers import RecetaSerializer, ComentarioSerializer, ListaDeComprasS
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, DjangoModelPermissions
 
 # ViewSet para Receta con permisos
 class RecetaViewSet(viewsets.ModelViewSet):
@@ -16,23 +16,23 @@ class RecetaViewSet(viewsets.ModelViewSet):
 class ComentarioList(generics.ListCreateAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Todos pueden ver, autenticados pueden crear
 
 class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # Vistas Genéricas para ListaDeCompras con permisos
 class ListaDeComprasList(generics.ListCreateAPIView):
     queryset = ListaDeCompras.objects.all()
     serializer_class = ListaDeComprasSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Todos pueden ver, autenticados pueden crear
 
 class ListaDeComprasDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ListaDeCompras.objects.all()
     serializer_class = ListaDeComprasSerializer
-    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 # api_view Propia para listar comentarios de una receta específica
 @api_view(['GET'])

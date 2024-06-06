@@ -16,7 +16,7 @@ class UserTests(APITestCase):
 
     def test_user_login(self):
         user = User.objects.create_user(username='testuser', password='testpassword')
-        url = reverse('login')  # Asegúrate de tener la URL de login configurada
+        url = reverse('login')
         data = {
             'username': 'testuser', 
             'password': 'testpassword'

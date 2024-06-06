@@ -1,9 +1,16 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 from .models import Receta, Comentario, ListaDeCompras
 
 class RecetaTests(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_create_receta(self):
         url = reverse('receta-list')
@@ -23,6 +30,11 @@ class RecetaTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class ComentarioTests(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_create_comentario(self):
         receta = Receta.objects.create(
@@ -47,6 +59,11 @@ class ComentarioTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class ListaDeComprasTests(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_create_lista_de_compras(self):
         url = reverse('lista-de-compras-list')

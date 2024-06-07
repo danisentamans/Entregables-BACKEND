@@ -6,6 +6,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, DjangoModelPermissions
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_staff
+
+# ViewSet para Receta con permisos
+class RecetaViewSet(viewsets.ModelViewSet):
+    queryset = Receta.objects.all()
+    serializer_class = RecetaSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
+
 # ViewSet para Receta con permisos
 class RecetaViewSet(viewsets.ModelViewSet):
     queryset = Receta.objects.all()

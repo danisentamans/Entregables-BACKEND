@@ -4,11 +4,18 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/users');
 const orderRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
-const { auth } = require('./middleware/auth');
+const newsRoutes = require('./routes/news');
+const { auth } = require('../../middleware/auth');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
+
+// Configuramos CORS para permitir solicitudes desde el frontend
+app.use(cors({
+    origin: 'http://localhost:5173' // Cambia esto a la URL de tu frontend si es diferente
+}));
 
 // Middlewares
 app.use(express.json());
@@ -22,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 app.use('/api/auth', authRoutes);
 app.use('/api/users', auth, userRoutes); // Protected route, requires authentication
 app.use('/api/orders', auth, orderRoutes); // Protected route, requires authentication
+app.use('/api/news', newsRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

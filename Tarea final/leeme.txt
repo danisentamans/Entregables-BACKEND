@@ -1,3 +1,0 @@
-npm init -y
-
-npm install express mongoose nodemailer twilio dotenv bcryptjs jsonwebtoken

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { auth } = require('../middleware/auth');
+const { auth } = require('../../../middleware/auth');
+const { makeAdmin } = require('../../../middleware/authMiddleware');
+const { updateUserToAdmin } = require('../controllers/authController');
 
 // Obtener el perfil del usuario autenticado
 router.get('/me', auth, async (req, res) => {
@@ -30,6 +32,8 @@ router.put('/me', auth, async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
+
+router.put('/:username/update-to-admin', auth, makeAdmin, updateUserToAdmin);
 
 // Eliminar el usuario autenticado
 router.delete('/me', auth, async (req, res) => {

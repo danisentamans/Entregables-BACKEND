@@ -1,0 +1,81 @@
+/* default styling */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: fantasy; /* Aplicar la fuente fantasy a todas las letras */
+  }
+  
+  /* Navbar */
+  .navbar {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    min-height: 70px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  .menuItems {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menuItems li {
+    display: inline;
+  }
+  
+  .menuItems li:not(:last-child) {
+    margin-right: 10px;
+  }
+  
+  .menuItems a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .menuItems a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Menú desplegable */
+  .menuToggleCheckbox {
+    display: none;
+  }
+  
+  .menuIcon {
+    display: none;
+  }
+  
+  
+  /* Estilos para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .menuToggleCheckbox {
+      display: none;
+    }
+  
+    .menuIcon {
+      display: block;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  
+    .menuItems {
+      display: none;
+    }
+  
+    .menuItems li {
+      display: block;
+      margin: 10px 0;
+    }
+  
+    .menuToggleCheckbox:checked ~ .menuItems {
+      display: block;
+    }
+  }
+  

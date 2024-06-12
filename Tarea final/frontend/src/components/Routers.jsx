@@ -8,15 +8,9 @@ import News from './News';
 import NewsForm from './NewsForm';
 import { AuthProvider } from '../contexts/AuthContext';
 import ProfilePage from './ProfilePage';
-
-const Home = () => {
-    return (
-        <div>
-            <h1>Bienvenido a la aplicación de gestión de pedidos de horno</h1>
-            <p>Aquí puedes administrar tus pedidos de horno de manera fácil y rápida.</p>
-        </div>
-    );
-};
+import AdminDashboard from './AdminDashboard';
+import EditUser from './EditUser';
+import Home from './Home';
 
 export default function Routers() {
     return (
@@ -33,6 +27,8 @@ export default function Routers() {
                     <Route path="/news" element={<News />} />
                     <Route path="/news/new" element={<NewsForm />} />
                     <Route path="/news/edit/:id" element={<NewsForm />} />
+                    <Route path="/admin" element={<AdminDashboard />}/>
+                    <Route path="/admin/edit/:id" element={<EditUser/>} />
                 </Route>
             </Routes>
         </AuthProvider>

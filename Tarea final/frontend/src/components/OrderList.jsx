@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import styles from '../styles/OrderList.module.css';
 
 const OrderList = () => {
     const { user } = useAuth(); 
@@ -29,18 +30,21 @@ const OrderList = () => {
     };
 
     return (
-        <div>
-            <Link to="/order/new">Create New Order</Link>
-            <ul>
+        <div className={styles.container}>
+            <h2 className={styles.title}>Pedidos</h2>
+            <Link to="/order/new" className={styles.newOrderButton}>Nuevo pedido</Link>
+            <ul className={styles.orderList}>
                 {orders.map(order => (
-                    <li key={order._id}>
-                        <ul>
+                    <li key={order._id} className={styles.orderItem}>
+                        <ul className={styles.itemList}>
                             {order.items.map((item, index) => (
-                                <li key={index}>{item.product} - {item.quantity}</li>
+                                <li key={index} className={styles.item}>{item.product} - {item.quantity}</li>
                             ))}
                         </ul>
-                        <Link to={`/order/edit/${order._id}`}>Edit</Link>
-                        <button onClick={() => handleDelete(order._id)}>Delete</button>
+                        <div className={styles.buttons}>
+                            <Link to={`/order/edit/${order._id}`} className={styles.editButton}>Editar</Link>
+                            <button onClick={() => handleDelete(order._id)} className={styles.deleteButton}>Eliminar</button>
+                        </div>
                     </li>
                 ))}
             </ul>

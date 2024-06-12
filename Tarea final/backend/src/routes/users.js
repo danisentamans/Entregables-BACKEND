@@ -1,48 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
 const { auth } = require('../../../middleware/auth');
-const { makeAdmin } = require('../../../middleware/authMiddleware');
-const { updateUserToAdmin } = require('../controllers/authController');
+const { isAdmin } = require('../../../middleware/authMiddleware');
+const userController = require('../controllers/userController');
 
-// Obtener el perfil del usuario autenticado
-router.get('/me', auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId).select('-password');
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error' });
-    }
-});
-
-// Actualizar el perfil del usuario autenticado
-router.put('/me', auth, async (req, res) => {
-    const { firstName, lastName, phone } = req.body;
-    try {
-        const user = await User.findById(req.user.userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        user.firstName = firstName || user.firstName;
-        user.lastName = lastName || user.lastName;
-        user.phone = phone || user.phone;
-        await user.save();
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error' });
-    }
-});
-
-router.put('/:username/update-to-admin', auth, makeAdmin, updateUserToAdmin);
-
-// Eliminar el usuario autenticado
-router.delete('/me', auth, async (req, res) => {
-    try {
-        await User.findByIdAndDelete(req.user.userId);
-        res.json({ message: 'User deleted' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error' });
-    }
-});
+router.get('/me', auth, userController.getAuthenticatedUser);
+router.put('/me', auth, userController.updateAuthenticatedUser);
+router.put('/:id', auth, isAdmin, userController.updateUserById);
+router.put('/:username/update-to-admin', auth, userController.updateToAdmin);
+router.delete('/me', auth, userController.deleteAuthenticatedUser);
+router.get('/', auth, isAdmin, userController.getAllUsers);
+router.get('/:id', auth, isAdmin, userController.getUserById);
 
 module.exports = router;

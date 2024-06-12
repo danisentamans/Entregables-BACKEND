@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import styles from '../styles/NewsForm.module.css';
 
 const NewsForm = () => {
     const [formData, setFormData] = useState({ title: '', description: '', image: '' });
@@ -49,7 +50,8 @@ const NewsForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+            <h2>{id ? 'Actualizar' : 'Nueva'} Noticia</h2>
             <input
                 type="text"
                 name="title"
@@ -73,7 +75,7 @@ const NewsForm = () => {
                 onChange={handleChange}
                 required
             />
-            <button type="submit">{id ? 'Update' : 'Create'} News</button>
+            <button type="submit">{id ? 'Actualizar' : 'Crear'} Notícia</button>
         </form>
     );
 };

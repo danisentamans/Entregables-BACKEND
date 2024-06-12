@@ -1,12 +1,20 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary-color: #646cff;
+  --secondary-color: #535bf2;
+  --background-image: url('../images/cabecero.jpg'); /* Imagen de fondo */
+  --background-color-light: #ffffff;
+  --text-color-light: #213547;
+  --text-color-dark: rgba(255, 255, 255, 0.87);
+  --button-bg-light: #f9f9f9;
+  --button-bg-dark: #1a1a1a;
+  --font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  font-family: var(--font-family);
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: var(--text-color-light);
+  background-color: var(--background-color-light);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,19 +23,22 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary-color);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--secondary-color);
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background-color-light);
+  color: var(--text-color-light);
 }
 
 h1 {
@@ -42,27 +53,33 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-bg-light);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--primary-color);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-color-dark);
+    background-color: #242424;
+  }
+  body {
+    background-image: var(--background-image); /* Añadir la imagen de fondo en modo oscuro */
+    background-size: cover; /* Ajusta la imagen para cubrir todo el fondo */
+    background-position: center; /* Centra la imagen */
+    color: var(--text-color-dark);
   }
   a:hover {
-    color: #747bff;
+    color: var(--secondary-color);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--button-bg-dark);
   }
 }

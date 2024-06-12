@@ -1,81 +1,67 @@
-/* default styling */
+.navbar {
+  background-color: #e6e6e6;
+  color: #333;
+  padding: 20px 0;
+  text-align: center;
+  min-height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
 
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: fantasy; /* Aplicar la fuente fantasy a todas las letras */
-  }
-  
-  /* Navbar */
-  .navbar {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    min-height: 70px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-  
-  .menuItems {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menuItems li {
-    display: inline;
-  }
-  
-  .menuItems li:not(:last-child) {
-    margin-right: 10px;
-  }
-  
-  .menuItems a {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .menuItems a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Menú desplegable */
-  .menuToggleCheckbox {
-    display: none;
-  }
-  
+.menuItems {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.menuItems li {
+  display: inline;
+}
+
+.menuItems a {
+  color: #333;
+  text-decoration: none;
+}
+
+.menuItems a:hover {
+  text-decoration: underline;
+}
+
+.menuToggleCheckbox {
+  display: none;
+}
+
+.menuIcon {
+  display: none;
+}
+
+@media (max-width: 768px) {
   .menuIcon {
-    display: none;
-  }
-  
-  
-  /* Estilos para pantallas pequeñas */
-  @media (max-width: 768px) {
-    .menuToggleCheckbox {
-      display: none;
-    }
-  
-    .menuIcon {
       display: block;
       font-size: 24px;
       cursor: pointer;
-    }
-  
-    .menuItems {
+      color: #333;
+      margin-left: auto;
+  }
+
+  .menuItems {
       display: none;
-    }
-  
-    .menuItems li {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .menuItems li {
       display: block;
       margin: 10px 0;
-    }
-  
-    .menuToggleCheckbox:checked ~ .menuItems {
-      display: block;
-    }
   }
-  
+
+  .menuToggleCheckbox:checked ~ .menuItems {
+      display: flex;
+  }
+}

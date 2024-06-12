@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import styles from '../styles/Register.module.css';
 
 const countryCodes = {
     'España': '+34',
     'Alemania': '+49',
     'Francia': '+33',
     'Italia': '+39',
-    'Reino unido': '+44'
+    'Reino Unido': '+44'
 };
 
 const Register = () => {
@@ -47,7 +48,8 @@ const Register = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+            <h2>Registrarse</h2>
             <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} required />
             <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
             <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
@@ -62,9 +64,9 @@ const Register = () => {
             <input type="date" name="dateOfBirth" placeholder="Date of Birth" value={formData.dateOfBirth} onChange={handleChange} required />
             <label>
                 <input type="checkbox" name="receiveNews" checked={formData.receiveNews} onChange={handleChange} />
-                Receive latest news and updates
+                Recibir las últimas novedades
             </label>
-            <button type="submit">Register</button>
+            <button type="submit">Registrarse</button>
         </form>
     );
 };

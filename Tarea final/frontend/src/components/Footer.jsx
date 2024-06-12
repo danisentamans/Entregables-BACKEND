@@ -10,7 +10,7 @@ export default function Footer() {
                     <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer"><FaTwitterSquare /></a>
                     <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><FaInstagramSquare /></a>
                 </div> */}
-                <p className={styles.copyRight}>© 2024 Fitness Gym. Todos los derechos reservados.</p>
+                <p className={styles.copyRight}>© 2024 Forn Pa i Dolç Gran Via. Todos los derechos reservados.</p>
             </div>
         </footer>
     );

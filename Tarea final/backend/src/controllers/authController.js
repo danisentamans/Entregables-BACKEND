@@ -57,19 +57,14 @@ exports.updateUserToAdmin = async (req, res) => {
     const { username } = req.params;
 
     try {
-        // Buscar al usuario por su nombre de usuario
         const user = await User.findOne({ username });
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
-        // Verificar si el usuario ya es administrador
         if (user.role === 'admin') {
             return res.status(400).json({ message: 'User is already an admin' });
         }
-
-        // Actualizar el rol del usuario a "admin"
         user.role = 'admin';
         await user.save();
 

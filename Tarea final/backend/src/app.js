@@ -14,7 +14,7 @@ const app = express();
 
 // Configuramos CORS para permitir solicitudes desde el frontend
 app.use(cors({
-    origin: 'http://localhost:5173' // Cambia esto a la URL de tu frontend si es diferente
+    origin: 'http://localhost:5173'
 }));
 
 // Middlewares

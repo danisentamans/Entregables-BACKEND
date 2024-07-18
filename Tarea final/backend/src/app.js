@@ -5,7 +5,7 @@ const userRoutes = require('./routes/users');
 const orderRoutes = require('./routes/orders');
 const authRoutes = require('./routes/auth');
 const newsRoutes = require('./routes/news');
-const { auth } = require('../../middleware/auth');
+const { auth } = require('./middleware/auth');
 const cors = require('cors');
 
 dotenv.config();

@@ -10,17 +10,17 @@ const db = require("./database/db");
 const cookieParser = require("cookie-parser");
 
 const app = express();
-const binance = new Binance().options({
-  APIKEY: config.API_KEY,
-  APISECRET: config.API_SECRET,
-  useServerTime: true,
-});
-
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 //Cookies
 app.use(cookieParser()); // Utilizamos el middleware cookie-parser
+
+const binance = new Binance().options({
+  APIKEY: config.API_KEY,
+  APISECRET: config.API_SECRET,
+  useServerTime: true,
+});
 
 let latestData = [];
 
@@ -111,6 +111,7 @@ app.get("/", async (req, res) => {
     // Recuperar las órdenes desde la base de datos
     const orders = await Order.find();
     // const userId = req.cookies.userId;
+    //Aquí usaría las cookies, pero no me funcionaban correctamente
 
     // Renderizar la vista 'index' y pasarle los datos de las órdenes
     res.render("index", {
@@ -250,7 +251,7 @@ app.get("/orders/:id", async (req, res) => {
   }
 });
 
-// Actualizar (PUT) - Actualizar una orden (ejemplo: para actualizar el estado)
+// Actualizar (PUT) - Actualizar una orden
 app.put("/orders/:id", async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -287,22 +288,6 @@ app.delete("/orders/:id", async (req, res) => {
     }
   } catch (error) {
     console.error("Error borrando la orden:", error);
-    res
-      .status(500)
-      .json({ code: "error", message: "Error en la base de datos" });
-  }
-});
-
-// Actualizar una orden
-app.put("/orders/:id", async (req, res) => {
-  try {
-    const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json(updatedOrder);
-  } catch (error) {
     res
       .status(500)
       .json({ code: "error", message: "Error en la base de datos" });

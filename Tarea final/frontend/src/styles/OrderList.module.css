@@ -1,0 +1,83 @@
+.container {
+    padding: 20px;
+    background-color: var(--background-color-light);
+    color: var(--text-color-light);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--text-color-light);
+}
+
+.newOrderButton {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.25s;
+}
+
+.newOrderButton:hover {
+    background-color: #218838;
+}
+
+.orderList {
+    list-style: none;
+    padding: 0;
+}
+
+.orderItem {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.itemList {
+    list-style: none;
+    padding: 0;
+}
+
+.item {
+    margin: 5px 0;
+}
+
+.buttons {
+    margin-top: 10px;
+}
+
+.editButton {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.25s;
+}
+
+.editButton:hover {
+    background-color: #e0a800;
+}
+
+.deleteButton {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.25s;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}

@@ -1,0 +1,31 @@
+--crear el entorno
+python -m venv venvCocina
+
+--activar el entorno
+venvCocina/Scripts/activate
+pip install -r requirements.txt
+
+--empezar proyecto
+django-admin startproject recetas
+python manage.py startapp desafios
+
+--iremos a la carpeta del proyecto
+cd recetas
+
+--haremos:
+django-admin startapp cocina
+
+--LANZAR LA APP
+
+--iniciar la base de datos
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+
+Listar y crear recetas: http://localhost:8000/api/recetas/
+Detallar, actualizar y eliminar una receta: http://localhost:8000/api/recetas/<id>/
+Listar y crear comentarios: http://localhost:8000/api/comentarios/
+Detallar, actualizar y eliminar un comentario: http://localhost:8000/api/comentarios/<id>/
+Listar comentarios de una receta específica: http://localhost:8000/api/recetas/<receta_id>/comentarios/
+......

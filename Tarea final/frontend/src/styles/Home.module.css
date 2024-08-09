@@ -1,0 +1,131 @@
+:root {
+    --text-color-light: #f5f5f5; /* Más claro para mejor visibilidad */
+    --text-color-dark: #3e2a1a;
+    --primary-color: #a37b59;
+    --secondary-color: #d3b8a4;
+    --accent-color: #f4c542;
+    --background-overlay-color: rgba(0, 0, 0, 0.5);
+    --shadow-color: rgba(0, 0, 0, 0.15);
+}
+
+.homeContainer {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    background-color: var(--background-overlay-color); /* Capa de superposición para el texto */
+    box-sizing: border-box;
+}
+
+.leftSection {
+    flex: 1;
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-right: 40px;
+    color: var(--text-color-light);
+    animation: fadeInLeft 1s ease-out;
+}
+
+.logoContainer {
+    margin-bottom: 20px;
+}
+
+.logoImage {
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    border: 4px solid var(--accent-color);
+    box-shadow: 0px 4px 15px var(--shadow-color);
+}
+
+.textContainer {
+    max-width: 400px;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--text-color-light);
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.description {
+    font-size: 1rem;
+    color: var(--text-color-light);
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.ctaButton {
+    background-color: var(--accent-color);
+    color: var(--text-color-dark);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0px 4px 10px var(--shadow-color);
+}
+
+.ctaButton:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+.rightSection {
+    flex: 1;
+    max-width: 55%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 15px var(--shadow-color);
+    animation: fadeInRight 1s ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
